@@ -64,27 +64,47 @@ sudo ./syswatch-daemon
 * Real-time alert sistemi
 
 ---
+## 📝 Yapılacak İşler (To-Do List)
 
-## ✅ Yapılacak İşler (To-Do List)
+### 🟢 Milestone 1: **Temel Daemon Yapısı** (Bitiş: 6 Ekim)
 
-### Başlangıç Aşaması (1-2 hafta)
+* [ ] Go tabanlı temel daemon oluşturma
+* [ ] Metric toplama (CPU, RAM, Disk, Network)
+* [ ] Loglama altyapısı ekleme
+* [ ] Basit terminal tabanlı dashboard
 
-* [ ] Temel Go daemon’u oluştur
-* [ ] Metric toplama ve loglama fonksiyonları ekle
-* [ ] Basit terminal/web dashboard
+---
 
-### Orta Aşama (2-6 hafta)
+### 🟡 Milestone 2: **Dashboard & Yapılandırma** (Bitiş: 27 Ekim)
+
+* [ ] Web tabanlı dashboard (minimal UI)
+* [ ] Konfigürasyon dosyası desteği
+* [ ] Birim testleri için temel altyapı
+
+---
+
+### 🟠 Milestone 3: **Cluster & Anomali Tespiti** (Bitiş: 24 Kasım)
 
 * [ ] Cluster-wide metric toplama
 * [ ] Anomaly detection algoritmaları
+* [ ] Basit alarm mekanizması
+
+---
+
+### 🔵 Milestone 4: **Entegrasyonlar & İleri Seviye Özellikler** (Bitiş: 15 Aralık)
+
 * [ ] Grafana / Plotly entegrasyonu
-
-### İleri Aşama (6+ hafta)
-
 * [ ] Prometheus + Alertmanager entegrasyonu
 * [ ] Real-time alert bot (Telegram/Slack)
-* [ ] Kubernetes deployment ve ölçeklendirme
+
+---
+
+### ⚫ Milestone 5: **Sürekli Gelişim** (Tarih yok, ongoing)
+
+* [ ] Kubernetes deployment ve otomatik ölçeklendirme
 * [ ] Performans testleri ve optimizasyon
+* [ ] CI/CD pipeline ekleme
+* [ ] Geliştikçe yeni anomaly detection yöntemleri
 
 ---
 
