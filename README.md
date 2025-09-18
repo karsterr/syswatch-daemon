@@ -110,7 +110,7 @@ sudo ./syswatch-daemon
 
 ## ⚡ Not
 
-Proje geliştirmeye **kısa süre içinde başlanacaktır** ve roadmap’deki adımlar sırasıyla ilerleyecektir. Her aşamada yeni özellikler eklenerek, **production-ready Linux sistem izleme daemon’u** hedeflenmektedir.
+Proje geliştirmeye **22 Eylül**'de başlayacak ve roadmap’deki adımlar sırasıyla ilerleyecektir. Her aşamada yeni özellikler eklenerek, **production-ready Linux sistem izleme daemon’u** hedeflenmektedir.
 
 ---
 
