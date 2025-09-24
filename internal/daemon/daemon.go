@@ -5,6 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/karsterr/syswatch-daemon/internal/config"
+	"github.com/karsterr/syswatch-daemon/internal/dashboard"
 	"github.com/karsterr/syswatch-daemon/internal/logger"
 	"github.com/karsterr/syswatch-daemon/internal/metrics"
 )
@@ -13,16 +15,32 @@ import (
 type Daemon struct {
 	mu            sync.RWMutex
 	running       bool
+	config        *config.Config
 	metricsCol    *metrics.Collector
+	dashboardSrv  *dashboard.Server
 	stopChan      chan struct{}
 	wg            sync.WaitGroup
 }
 
-// New yeni daemon instance oluşturur
+// New yeni daemon instance oluşturur (varsayılan config ile)
 func New() *Daemon {
+	return NewWithConfig(config.Default())
+}
+
+// NewWithConfig belirtilen konfigürasyon ile yeni daemon instance oluşturur
+func NewWithConfig(cfg *config.Config) *Daemon {
+	metricsCol := metrics.NewCollector()
+	
+	var dashboardSrv *dashboard.Server
+	if cfg.Dashboard.Enabled {
+		dashboardSrv = dashboard.NewServer(metricsCol, cfg.Dashboard.Port)
+	}
+	
 	return &Daemon{
-		metricsCol: metrics.NewCollector(),
-		stopChan:   make(chan struct{}),
+		config:       cfg,
+		metricsCol:   metricsCol,
+		dashboardSrv: dashboardSrv,
+		stopChan:     make(chan struct{}),
 	}
 }
 
@@ -41,6 +59,13 @@ func (d *Daemon) Start(ctx context.Context) error {
 	// Metrics collector'ı başlat
 	if err := d.metricsCol.Start(); err != nil {
 		return err
+	}
+	
+	// Dashboard server'ını başlat (eğer etkin ise)
+	if d.config.Dashboard.Enabled && d.dashboardSrv != nil {
+		if err := d.dashboardSrv.Start(); err != nil {
+			return err
+		}
 	}
 
 	d.running = true
@@ -85,6 +110,13 @@ func (d *Daemon) Stop(ctx context.Context) error {
 
 	// Metrics collector'ı durdur
 	d.metricsCol.Stop()
+	
+	// Dashboard server'ını durdur (eğer varsa)
+	if d.dashboardSrv != nil {
+		if err := d.dashboardSrv.Stop(ctx); err != nil {
+			log.Errorf("Dashboard server durdurulurken hata: %v", err)
+		}
+	}
 
 	d.running = false
 	log.Info("Daemon başarıyla durduruldu")
@@ -103,7 +135,7 @@ func (d *Daemon) mainLoop(ctx context.Context) {
 	defer d.wg.Done()
 
 	log := logger.GetLogger()
-	ticker := time.NewTicker(5 * time.Second) // Her 5 saniyede bir çalış
+	ticker := time.NewTicker(time.Duration(d.config.Metrics.Interval) * time.Second)
 	defer ticker.Stop()
 
 	log.Info("Ana iş döngüsü başlatıldı")

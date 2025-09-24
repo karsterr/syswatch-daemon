@@ -1,0 +1,23 @@
+{
+  "daemon": {
+    "name": "syswatch-daemon",
+    "version": "0.1.0"
+  },
+  "dashboard": {
+    "enabled": true,
+    "port": 8080,
+    "host": "localhost"
+  },
+  "logging": {
+    "level": "info",
+    "format": "text",
+    "output": "stdout"
+  },
+  "metrics": {
+    "interval": 5,
+    "enable_cpu": true,
+    "enable_memory": true,
+    "enable_disk": true,
+    "enable_network": true
+  }
+}
